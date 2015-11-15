@@ -1,0 +1,19 @@
+[package]
+name = "framebuffer"
+version = "0.1.0"
+authors = ["Roy van der Vegt <royvandervegt@gmail.com>"]
+
+[lib]
+name = "framebuffer"
+path = "src/lib.rs"
+
+[dependencies]
+libc = "0.2.2"
+memmap = "0.2.2"
+
+[[example]]
+name = "rust-logo"
+path = "examples/main.rs"
+
+[dev_dependencies]
+bmp = "0.1.4"
