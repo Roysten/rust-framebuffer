@@ -11,13 +11,13 @@ use std::error::Error;
 
 use memmap::{Mmap, Protection};
 
-const FBIOGET_VSCREENINFO: u64 = 0x4600;
-const FBIOPUT_VSCREENINFO: u64 = 0x4601;
-const FBIOGET_FSCREENINFO: u64 = 0x4602;
+const FBIOGET_VSCREENINFO: libc::c_ulong = 0x4600;
+const FBIOPUT_VSCREENINFO: libc::c_ulong = 0x4601;
+const FBIOGET_FSCREENINFO: libc::c_ulong = 0x4602;
 
-const KDSETMODE: u64 = 0x4B3A;
-const KD_TEXT: u32 = 0x00;
-const KD_GRAPHICS: u32 = 0x01;
+const KDSETMODE: libc::c_ulong = 0x4B3A;
+const KD_TEXT: libc::c_ulong = 0x00;
+const KD_GRAPHICS: libc::c_ulong = 0x01;
 
 ///Bitfield which is a part of VarScreeninfo.
 #[repr(C)]
