@@ -2,7 +2,13 @@
 name = "framebuffer"
 version = "0.1.1"
 authors = ["Roy van der Vegt <royvandervegt@gmail.com>"]
-
+description = """
+Basic framebuffer abstraction. Handles the necessary ioctls and mmaps the framebuffer device.
+"""
+keywords = ["framebuffer", "fb"]
+documentation = "http://roysten.github.io/rust-framebuffer/target/doc/framebuffer/"
+repository = "https://github.com/roysten/rust-framebuffer"
+license = "WTFPL"
 [lib]
 name = "framebuffer"
 path = "src/lib.rs"
