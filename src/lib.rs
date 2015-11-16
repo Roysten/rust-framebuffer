@@ -138,6 +138,12 @@ impl fmt::Display for FramebufferError {
     }
 }
 
+impl std::convert::From<std::io::Error> for FramebufferError {
+    fn from(err: std::io::Error) -> FramebufferError {
+        FramebufferError::new(FramebufferErrorKind::IoError, err.description())
+    }
+}
+
 ///Struct that should be used to work with the framebuffer. Direct usage of `frame` should not be
 ///necessary.
 pub struct Framebuffer {
@@ -149,26 +155,28 @@ pub struct Framebuffer {
 
 impl Framebuffer {
     pub fn new(path_to_device: &str) -> Result<Framebuffer, FramebufferError> {
-        let device = OpenOptions::new().read(true).write(true).open(path_to_device);
-
-        if device.is_err() {
-            return Err(FramebufferError::new(FramebufferErrorKind::IoError, "Could not access framebuffer"));
-        }
-
-        let device = device.unwrap();
+        let device = try!(OpenOptions::new().read(true).write(true).open(path_to_device));
 
         let var_screen_info = try!(Framebuffer::get_var_screeninfo(&device));
         let fix_screen_info = try!(Framebuffer::get_fix_screeninfo(&device));
 
         let frame_length = (fix_screen_info.line_length * var_screen_info.yres) as usize;
-        let frame = Mmap::open_with_offset(&device, Protection::ReadWrite, 0, frame_length).unwrap();
+        let frame = Mmap::open_with_offset(&device, Protection::ReadWrite, 0, frame_length);
+        match frame {
+            Ok(frame_result) => 
+                Ok(Framebuffer {
+                    device: device,
+                    frame: frame_result,
+                    var_screen_info: var_screen_info,
+                    fix_screen_info: fix_screen_info,
+                }),
+                Err(_) => Err(
+                    FramebufferError::new(
+                    FramebufferErrorKind::IoError,
+                    &format!("Could not map memory! Mem start: {} Mem stop: {}", 0, frame_length))
+                ),
+        }
 
-        Ok(Framebuffer {
-            device: device,
-            frame: frame,
-            var_screen_info: var_screen_info,
-            fix_screen_info: fix_screen_info,
-        })
     }
 
     ///Writes a frame to the Framebuffer.
