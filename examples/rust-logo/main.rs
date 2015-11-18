@@ -12,7 +12,7 @@ fn main() {
     let bytespp = framebuffer.var_screen_info.bits_per_pixel / 8;
 
     let mut frame = vec![0u8; (line_length * h) as usize];
-    let img = bmp::open("examples/rust-logo.bmp").unwrap();
+    let img = bmp::open("examples/rust-logo/rust-logo.bmp").unwrap();
 
     //Disable text mode in current tty
     let _ = Framebuffer::set_kd_mode(KdMode::Graphics).unwrap();

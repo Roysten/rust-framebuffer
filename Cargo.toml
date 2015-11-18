@@ -19,7 +19,12 @@ memmap = "0.2.2"
 
 [[example]]
 name = "rust-logo"
-path = "examples/main.rs"
+path = "examples/rust-logo/main.rs"
+
+[[example]]
+name = "starfield"
+path = "examples/starfield/main.rs"
 
 [dev_dependencies]
 bmp = "0.1.4"
+rand = "0.3.12"
