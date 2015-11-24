@@ -73,7 +73,7 @@ pub struct VarScreeninfo {
 #[allow(raw_pointer_derive)]
 pub struct FixScreeninfo {
     pub id: [u8; 16],
-    pub smem_start: u64,
+    pub smem_start: usize,
     pub smem_len: u32,
     pub fb_type: u32,
     pub type_aux: u32,
@@ -82,7 +82,7 @@ pub struct FixScreeninfo {
     pub ypanstep: u16,
     pub ywrapstep: u16,
     pub line_length: u32,
-    pub mmio_start: u64,
+    pub mmio_start: usize,
     pub mmio_len: u32,
     pub accel: u32,
     pub capabilities: u16,
