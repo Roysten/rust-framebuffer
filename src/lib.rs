@@ -11,13 +11,13 @@ use std::error::Error;
 
 use memmap::{Mmap, Protection};
 
-const FBIOGET_VSCREENINFO: u64 = 0x4600;
-const FBIOPUT_VSCREENINFO: u64 = 0x4601;
-const FBIOGET_FSCREENINFO: u64 = 0x4602;
+const FBIOGET_VSCREENINFO: libc::c_ulong = 0x4600;
+const FBIOPUT_VSCREENINFO: libc::c_ulong = 0x4601;
+const FBIOGET_FSCREENINFO: libc::c_ulong = 0x4602;
 
-const KDSETMODE: u64 = 0x4B3A;
-const KD_TEXT: u32 = 0x00;
-const KD_GRAPHICS: u32 = 0x01;
+const KDSETMODE: libc::c_ulong = 0x4B3A;
+const KD_TEXT: libc::c_ulong = 0x00;
+const KD_GRAPHICS: libc::c_ulong = 0x01;
 
 ///Bitfield which is a part of VarScreeninfo.
 #[repr(C)]
@@ -73,7 +73,7 @@ pub struct VarScreeninfo {
 #[allow(raw_pointer_derive)]
 pub struct FixScreeninfo {
     pub id: [u8; 16],
-    pub smem_start: u64,
+    pub smem_start: usize,
     pub smem_len: u32,
     pub fb_type: u32,
     pub type_aux: u32,
@@ -82,7 +82,7 @@ pub struct FixScreeninfo {
     pub ypanstep: u16,
     pub ywrapstep: u16,
     pub line_length: u32,
-    pub mmio_start: u64,
+    pub mmio_start: usize,
     pub mmio_len: u32,
     pub accel: u32,
     pub capabilities: u16,
@@ -138,6 +138,12 @@ impl fmt::Display for FramebufferError {
     }
 }
 
+impl std::convert::From<std::io::Error> for FramebufferError {
+    fn from(err: std::io::Error) -> FramebufferError {
+        FramebufferError::new(FramebufferErrorKind::IoError, err.description())
+    }
+}
+
 ///Struct that should be used to work with the framebuffer. Direct usage of `frame` should not be
 ///necessary.
 pub struct Framebuffer {
@@ -149,26 +155,28 @@ pub struct Framebuffer {
 
 impl Framebuffer {
     pub fn new(path_to_device: &str) -> Result<Framebuffer, FramebufferError> {
-        let device = OpenOptions::new().read(true).write(true).open(path_to_device);
-
-        if device.is_err() {
-            return Err(FramebufferError::new(FramebufferErrorKind::IoError, "Could not access framebuffer"));
-        }
-
-        let device = device.unwrap();
+        let device = try!(OpenOptions::new().read(true).write(true).open(path_to_device));
 
         let var_screen_info = try!(Framebuffer::get_var_screeninfo(&device));
         let fix_screen_info = try!(Framebuffer::get_fix_screeninfo(&device));
 
         let frame_length = (fix_screen_info.line_length * var_screen_info.yres) as usize;
-        let frame = Mmap::open_with_offset(&device, Protection::ReadWrite, 0, frame_length).unwrap();
+        let frame = Mmap::open_with_offset(&device, Protection::ReadWrite, 0, frame_length);
+        match frame {
+            Ok(frame_result) => 
+                Ok(Framebuffer {
+                    device: device,
+                    frame: frame_result,
+                    var_screen_info: var_screen_info,
+                    fix_screen_info: fix_screen_info,
+                }),
+                Err(_) => Err(
+                    FramebufferError::new(
+                    FramebufferErrorKind::IoError,
+                    &format!("Could not map memory! Mem start: {} Mem stop: {}", 0, frame_length))
+                ),
+        }
 
-        Ok(Framebuffer {
-            device: device,
-            frame: frame,
-            var_screen_info: var_screen_info,
-            fix_screen_info: fix_screen_info,
-        })
     }
 
     ///Writes a frame to the Framebuffer.
