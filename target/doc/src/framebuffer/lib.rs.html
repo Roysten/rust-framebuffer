@@ -263,6 +263,9 @@
 <span id="221">221</span>
 <span id="222">222</span>
 </pre><pre class='rust '>
+<span class='doccomment'>//!Simple linux framebuffer abstraction.</span>
+<span class='doccomment'>//!Examples can be found [here](https://github.com/Roysten/rust-framebuffer/tree/master/examples).</span>
+
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>memmap</span>;
 
@@ -287,7 +290,6 @@
 <span class='doccomment'>///Bitfield which is a part of VarScreeninfo.</span>
 <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>, <span class='ident'>Debug</span>)]</span>
-<span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>raw_pointer_derive</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Bitfield</span> {
     <span class='kw'>pub</span> <span class='ident'>offset</span>: <span class='ident'>u32</span>,
     <span class='kw'>pub</span> <span class='ident'>length</span>: <span class='ident'>u32</span>,
@@ -297,7 +299,6 @@
 <span class='doccomment'>///Struct as defined in /usr/include/linux/fb.h</span>
 <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>, <span class='ident'>Debug</span>)]</span>
-<span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>raw_pointer_derive</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>VarScreeninfo</span> {
     <span class='kw'>pub</span> <span class='ident'>xres</span>: <span class='ident'>u32</span>,    
     <span class='kw'>pub</span> <span class='ident'>yres</span>: <span class='ident'>u32</span>,
@@ -335,7 +336,6 @@
 <span class='doccomment'>///changed to fb_type.</span>
 <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>, <span class='ident'>Debug</span>)]</span>
-<span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>raw_pointer_derive</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>FixScreeninfo</span> {
     <span class='kw'>pub</span> <span class='ident'>id</span>: [<span class='ident'>u8</span>; <span class='number'>16</span>],
     <span class='kw'>pub</span> <span class='ident'>smem_start</span>: <span class='ident'>usize</span>,
