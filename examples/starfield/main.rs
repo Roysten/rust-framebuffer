@@ -6,7 +6,7 @@ use framebuffer::{KdMode, Framebuffer};
 
 const STAR_SPEED: f32 = 1.003;
 const STAR_GROWTH: f32 = 1.002;
-const STAR_COUNT: usize = 10;
+const STAR_COUNT: usize = 40;
 
 struct Starfield {
     stars: [Star; STAR_COUNT],
@@ -48,7 +48,7 @@ impl Starfield {
             ($x:expr, $y: expr) => { $y * line_length + $x * bytespp }
         }
 
-        let dim = star_data.2 as usize + 1;
+        let dim = star_data.2 as usize;
         for i in 0 .. dim {
             for j in 0 .. dim {
                 if star_data.0 + i < w && star_data.1 + j < h {
@@ -83,8 +83,8 @@ impl Star {
     }
 
     fn init(&mut self, w: usize, h: usize) {
-        let wh = w as f32 / 2.0;
-        let hh = h as f32 / 2.0;
+        let wh = w as f32 / 4.0;
+        let hh = h as f32 / 4.0;
 
         let mut rng = rand::thread_rng();
         self.x = rng.gen_range::<f32>(-wh, wh);

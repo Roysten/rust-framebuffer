@@ -1,3 +1,6 @@
+//!Simple linux framebuffer abstraction.
+//!Examples can be found [here](https://github.com/Roysten/rust-framebuffer/tree/master/examples).
+
 extern crate libc;
 extern crate memmap;
 
@@ -22,7 +25,6 @@ const KD_GRAPHICS: libc::c_ulong = 0x01;
 ///Bitfield which is a part of VarScreeninfo.
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
-#[allow(raw_pointer_derive)]
 pub struct Bitfield {
     pub offset: u32,
     pub length: u32,
@@ -32,7 +34,6 @@ pub struct Bitfield {
 ///Struct as defined in /usr/include/linux/fb.h
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
-#[allow(raw_pointer_derive)]
 pub struct VarScreeninfo {
     pub xres: u32,    
     pub yres: u32,
@@ -70,7 +71,6 @@ pub struct VarScreeninfo {
 ///changed to fb_type.
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
-#[allow(raw_pointer_derive)]
 pub struct FixScreeninfo {
     pub id: [u8; 16],
     pub smem_start: usize,
