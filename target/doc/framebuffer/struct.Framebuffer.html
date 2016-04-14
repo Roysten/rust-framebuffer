@@ -9,7 +9,9 @@
 
     <title>framebuffer::Framebuffer - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -42,10 +44,10 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>framebuffer</a>::<wbr><a class='struct' href=''>Framebuffer</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-234' class='srclink' href='../src/framebuffer/lib.rs.html#149-154' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-231' class='srclink' href='../src/framebuffer/src/lib.rs.html#149-154' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Framebuffer {
     pub device: <a class='struct' href='https://doc.rust-lang.org/nightly/std/fs/struct.File.html' title='std::fs::File'>File</a>,
     pub frame: <a class='struct' href='../memmap/struct.Mmap.html' title='memmap::Mmap'>Mmap</a>,
@@ -55,10 +57,10 @@
 necessary.</p>
 </div><h2 class='fields'>Fields</h2>
 <table><tr class='stab '>
-                                  <td id='structfield.device'><code>device</code></td><td></td></tr><tr class='stab '>
-                                  <td id='structfield.frame'><code>frame</code></td><td></td></tr><tr class='stab '>
-                                  <td id='structfield.var_screen_info'><code>var_screen_info</code></td><td></td></tr><tr class='stab '>
-                                  <td id='structfield.fix_screen_info'><code>fix_screen_info</code></td><td></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../framebuffer/struct.Framebuffer.html' title='framebuffer::Framebuffer'>Framebuffer</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(path_to_device: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../framebuffer/struct.Framebuffer.html' title='framebuffer::Framebuffer'>Framebuffer</a>, <a class='struct' href='../framebuffer/struct.FramebufferError.html' title='framebuffer::FramebufferError'>FramebufferError</a>&gt;</code></h4>
+                             <td id='structfield.device'><code>device</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.frame'><code>frame</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.var_screen_info'><code>var_screen_info</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.fix_screen_info'><code>fix_screen_info</code></td><td></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../framebuffer/struct.Framebuffer.html' title='framebuffer::Framebuffer'>Framebuffer</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(path_to_device: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../framebuffer/struct.Framebuffer.html' title='framebuffer::Framebuffer'>Framebuffer</a>, <a class='struct' href='../framebuffer/struct.FramebufferError.html' title='framebuffer::FramebufferError'>FramebufferError</a>&gt;</code></h4>
 <h4 id='method.write_frame' class='method'><code>fn <a href='#method.write_frame' class='fnname'>write_frame</a>(&amp;mut self, frame: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>)</code></h4>
 <div class='docblock'><p>Writes a frame to the Framebuffer.</p>
 </div><h4 id='method.get_fix_screeninfo' class='method'><code>fn <a href='#method.get_fix_screeninfo' class='fnname'>get_fix_screeninfo</a>(device: &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/std/fs/struct.File.html' title='std::fs::File'>File</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../framebuffer/struct.FixScreeninfo.html' title='framebuffer::FixScreeninfo'>FixScreeninfo</a>, <a class='struct' href='../framebuffer/struct.FramebufferError.html' title='framebuffer::FramebufferError'>FramebufferError</a>&gt;</code></h4>
@@ -112,7 +114,7 @@ done!</p>
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
@@ -128,6 +130,6 @@ done!</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

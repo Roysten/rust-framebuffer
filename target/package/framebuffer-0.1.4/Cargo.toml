@@ -1,0 +1,34 @@
+[package]
+name = "framebuffer"
+version = "0.1.4"
+authors = ["Roy van der Vegt <royvandervegt@gmail.com>"]
+description = """
+Basic framebuffer abstraction. Handles the necessary ioctls and mmaps the framebuffer device.
+"""
+keywords = ["framebuffer", "fb"]
+documentation = "http://roysten.github.io/rust-framebuffer/target/doc/framebuffer/"
+repository = "https://github.com/roysten/rust-framebuffer"
+license = "WTFPL"
+[lib]
+name = "framebuffer"
+path = "src/lib.rs"
+
+[dependencies]
+libc = "0.2.2"
+memmap = "0.3.0"
+
+[[example]]
+name = "rust-logo"
+path = "examples/rust-logo/main.rs"
+
+[[example]]
+name = "starfield"
+path = "examples/starfield/main.rs"
+
+[[example]]
+name = "mandelbrot"
+path = "examples/mandelbrot/main.rs"
+
+[dev_dependencies]
+bmp = "0.1.4"
+rand = "0.3.12"

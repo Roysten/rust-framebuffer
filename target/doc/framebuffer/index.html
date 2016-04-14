@@ -9,7 +9,9 @@
 
     <title>framebuffer - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -42,79 +44,66 @@
 
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>framebuffer</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-0' class='srclink' href='../src/framebuffer/lib.rs.html#1-222' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/framebuffer/src/lib.rs.html#1-222' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Simple linux framebuffer abstraction.
 Examples can be found <a href="https://github.com/Roysten/rust-framebuffer/tree/master/examples">here</a>.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.Bitfield.html'
-                               title='framebuffer::Bitfield'>Bitfield</a></td>
-                        <td class='docblock short'>
-                             <p>Bitfield which is a part of VarScreeninfo.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.FixScreeninfo.html'
-                               title='framebuffer::FixScreeninfo'>FixScreeninfo</a></td>
-                        <td class='docblock short'>
-                             <p>Struct as defined in /usr/include/linux/fb.h Note: type is a keyword in Rust and therefore has been
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Bitfield.html'
+                                  title='framebuffer::Bitfield'>Bitfield</a></td>
+                           <td class='docblock short'>
+                                <p>Bitfield which is a part of VarScreeninfo.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.FixScreeninfo.html'
+                                  title='framebuffer::FixScreeninfo'>FixScreeninfo</a></td>
+                           <td class='docblock short'>
+                                <p>Struct as defined in /usr/include/linux/fb.h Note: type is a keyword in Rust and therefore has been
 changed to fb_type.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.Framebuffer.html'
-                               title='framebuffer::Framebuffer'>Framebuffer</a></td>
-                        <td class='docblock short'>
-                             <p>Struct that should be used to work with the framebuffer. Direct usage of <code>frame</code> should not be
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Framebuffer.html'
+                                  title='framebuffer::Framebuffer'>Framebuffer</a></td>
+                           <td class='docblock short'>
+                                <p>Struct that should be used to work with the framebuffer. Direct usage of <code>frame</code> should not be
 necessary.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.FramebufferError.html'
-                               title='framebuffer::FramebufferError'>FramebufferError</a></td>
-                        <td class='docblock short'>
-                             
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.VarScreeninfo.html'
-                               title='framebuffer::VarScreeninfo'>VarScreeninfo</a></td>
-                        <td class='docblock short'>
-                             <p>Struct as defined in /usr/include/linux/fb.h</p>
-
-                        </td>
-                    </tr>
-                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.FramebufferError.html'
+                                  title='framebuffer::FramebufferError'>FramebufferError</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.VarScreeninfo.html'
+                                  title='framebuffer::VarScreeninfo'>VarScreeninfo</a></td>
+                           <td class='docblock short'>
+                                <p>Struct as defined in /usr/include/linux/fb.h</p>
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.FramebufferErrorKind.html'
-                               title='framebuffer::FramebufferErrorKind'>FramebufferErrorKind</a></td>
-                        <td class='docblock short'>
-                             <p>Kind of errors that can occur when dealing with the Framebuffer.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.KdMode.html'
-                               title='framebuffer::KdMode'>KdMode</a></td>
-                        <td class='docblock short'>
-                             <p>Enum that can be used to set the current KdMode.</p>
-
-                        </td>
-                    </tr>
-                </table></section>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.FramebufferErrorKind.html'
+                                  title='framebuffer::FramebufferErrorKind'>FramebufferErrorKind</a></td>
+                           <td class='docblock short'>
+                                <p>Kind of errors that can occur when dealing with the Framebuffer.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.KdMode.html'
+                                  title='framebuffer::KdMode'>KdMode</a></td>
+                           <td class='docblock short'>
+                                <p>Enum that can be used to set the current KdMode.</p>
+                           </td>
+                       </tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -157,7 +146,7 @@ necessary.</p>
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
@@ -173,6 +162,6 @@ necessary.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>
