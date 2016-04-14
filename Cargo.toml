@@ -25,6 +25,10 @@ path = "examples/rust-logo/main.rs"
 name = "starfield"
 path = "examples/starfield/main.rs"
 
+[[example]]
+name = "mandelbrot"
+path = "examples/mandelbrot/main.rs"
+
 [dev_dependencies]
 bmp = "0.1.4"
 rand = "0.3.12"
