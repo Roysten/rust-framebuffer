@@ -7,7 +7,7 @@ extern crate memmap;
 use libc::ioctl;
 
 use std::fmt;
-use std::io::prelude::*;
+use std::io::Write;
 use std::fs::{OpenOptions, File};
 use std::os::unix::io::AsRawFd;
 use std::error::Error;
@@ -24,7 +24,7 @@ const KD_GRAPHICS: libc::c_ulong = 0x01;
 
 ///Bitfield which is a part of VarScreeninfo.
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct Bitfield {
     pub offset: u32,
     pub length: u32,
@@ -33,7 +33,7 @@ pub struct Bitfield {
 
 ///Struct as defined in /usr/include/linux/fb.h
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct VarScreeninfo {
     pub xres: u32,    
     pub yres: u32,
@@ -70,7 +70,7 @@ pub struct VarScreeninfo {
 ///Struct as defined in /usr/include/linux/fb.h Note: type is a keyword in Rust and therefore has been
 ///changed to fb_type.
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct FixScreeninfo {
     pub id: [u8; 16],
     pub smem_start: usize,
