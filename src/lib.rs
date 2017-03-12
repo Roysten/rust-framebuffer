@@ -215,7 +215,7 @@ impl Framebuffer {
     ///done!
     pub fn set_kd_mode(kd_mode: KdMode) -> Result<i32, FramebufferError> {
         match unsafe { ioctl(0, KDSETMODE, kd_mode) } {
-            -1 => Err(FramebufferError::new(FramebufferErrorKind::IoctlFailed, "Ioctl returned - 1")),
+            -1 => Err(FramebufferError::new(FramebufferErrorKind::IoctlFailed, "Ioctl returned -1")),
             ret => Ok(ret),
         }
     }
