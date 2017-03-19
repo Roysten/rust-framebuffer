@@ -146,6 +146,7 @@ impl std::convert::From<std::io::Error> for FramebufferError {
 
 ///Struct that should be used to work with the framebuffer. Direct usage of `frame` should not be
 ///necessary.
+#[derive(Debug)]
 pub struct Framebuffer {
     pub device: File,
     pub frame: Mmap,
