@@ -1,6 +1,6 @@
 extern crate framebuffer;
 
-use framebuffer::{KdMode, Framebuffer};
+use framebuffer::{Framebuffer, KdMode};
 
 //Algorithm copied from:
 //https://en.wikipedia.org/wiki/Mandelbrot_set
@@ -18,7 +18,6 @@ fn main() {
 
     for (r, line) in frame.chunks_mut(line_length as usize).enumerate() {
         for (c, p) in line.chunks_mut(bytespp as usize).enumerate() {
-
             let x0 = (c as f32 / w as f32) * 3.5 - 2.5;
             let y0 = (r as f32 / h as f32) * 2.0 - 1.0;
 

@@ -14,8 +14,8 @@ name = "framebuffer"
 path = "src/lib.rs"
 
 [dependencies]
-libc = "0.2.2"
-memmap = "0.5.0"
+libc = "0.2"
+memmap = "0.5"
 
 [[example]]
 name = "rust-logo"

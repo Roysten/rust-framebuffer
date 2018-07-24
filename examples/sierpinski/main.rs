@@ -1,6 +1,6 @@
 extern crate framebuffer;
 
-use framebuffer::{KdMode, Framebuffer};
+use framebuffer::{Framebuffer, KdMode};
 
 fn main() {
     let mut framebuffer = Framebuffer::new("/dev/fb0").unwrap();
@@ -13,19 +13,27 @@ fn main() {
     let mut frame = vec![0u8; line_length * h];
 
     let _ = Framebuffer::set_kd_mode(KdMode::Graphics).unwrap();
-    
-    let half_line = w * bytespp / 2;
-    frame[half_line] = 255; 
-    frame[half_line + 1] = 255; 
-    frame[half_line + 2] = 255; 
 
-    for y in 1 .. h {
-        for x in 0 .. w {
+    let half_line = w * bytespp / 2;
+    frame[half_line] = 255;
+    frame[half_line + 1] = 255;
+    frame[half_line + 2] = 255;
+
+    for y in 1..h {
+        for x in 0..w {
             let curr_index = y * line_length + x * bytespp;
             let prev_index = curr_index - line_length;
 
-            let val_a = if x == 0 { 0 } else { frame[prev_index - bytespp] };
-            let val_b = if x == w - 1 { 0 } else { frame[prev_index + bytespp] };
+            let val_a = if x == 0 {
+                0
+            } else {
+                frame[prev_index - bytespp]
+            };
+            let val_b = if x == w - 1 {
+                0
+            } else {
+                frame[prev_index + bytespp]
+            };
 
             let val = if val_a > 0 { 255 } else { 0 } ^ if val_b > 0 { 255 } else { 0 };
 

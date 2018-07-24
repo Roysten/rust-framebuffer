@@ -1,8 +1,8 @@
-extern crate rand;
 extern crate framebuffer;
+extern crate rand;
 
+use framebuffer::{Framebuffer, KdMode};
 use rand::Rng;
-use framebuffer::{KdMode, Framebuffer};
 
 const STAR_SPEED: f32 = 1.003;
 const STAR_GROWTH: f32 = 1.002;
@@ -13,17 +13,14 @@ struct Starfield {
 }
 
 impl Starfield {
-
     fn new(framebuffer: &Framebuffer) -> Starfield {
         let w = framebuffer.var_screen_info.xres as usize;
         let h = framebuffer.var_screen_info.yres as usize;
 
         let stars = [Star::new_rand(w, h); STAR_COUNT];
-        Starfield {
-            stars: stars,
-        }
+        Starfield { stars: stars }
     }
-    
+
     fn tick(&mut self, framebuffer: &Framebuffer, frame: &mut [u8]) {
         let w = framebuffer.var_screen_info.xres as usize;
         let h = framebuffer.var_screen_info.yres as usize;
@@ -36,21 +33,22 @@ impl Starfield {
         }
     }
 
-
-    fn draw_star(star_data: (usize, usize, f32), framebuffer: &Framebuffer, frame: &mut[u8]) {
+    fn draw_star(star_data: (usize, usize, f32), framebuffer: &Framebuffer, frame: &mut [u8]) {
         let w = framebuffer.var_screen_info.xres as usize;
         let h = framebuffer.var_screen_info.yres as usize;
-    
+
         let line_length = framebuffer.fix_screen_info.line_length as usize;
         let bytespp = framebuffer.var_screen_info.bits_per_pixel as usize / 8;
 
         macro_rules! coords_to_index {
-            ($x:expr, $y: expr) => { $y * line_length + $x * bytespp }
+            ($x:expr, $y:expr) => {
+                $y * line_length + $x * bytespp
+            };
         }
 
         let dim = star_data.2 as usize;
-        for i in 0 .. dim {
-            for j in 0 .. dim {
+        for i in 0..dim {
+            for j in 0..dim {
                 if star_data.0 + i < w && star_data.1 + j < h {
                     frame[coords_to_index!(star_data.0 + i, star_data.1 + j)] = 255;
                     frame[coords_to_index!(star_data.0 + i, star_data.1 + j) + 1] = 255;
@@ -70,10 +68,9 @@ struct Star {
 }
 
 impl Star {
-
     fn new_rand(w: usize, h: usize) -> Star {
-        let mut star = Star { 
-            a: 0.0, 
+        let mut star = Star {
+            a: 0.0,
             x: 0.0,
             b: 0.0,
             z: 0.0,
@@ -124,13 +121,15 @@ fn main() {
 
     //Disable text mode in current tty
     //let _ = Framebuffer::set_kd_mode(KdMode::Graphics).unwrap();
-    
+
     loop {
-        for x in frame.iter_mut() { *x = 0; }
+        for x in frame.iter_mut() {
+            *x = 0;
+        }
         starfield.tick(&framebuffer, &mut frame);
         let _ = framebuffer.write_frame(&frame);
     }
-    
+
     //Reenable text mode in current tty
     //let _ = Framebuffer::set_kd_mode(KdMode::Text).unwrap();
 }

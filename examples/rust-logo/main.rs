@@ -1,7 +1,7 @@
-extern crate framebuffer;
 extern crate bmp;
+extern crate framebuffer;
 
-use framebuffer::{KdMode, Framebuffer};
+use framebuffer::{Framebuffer, KdMode};
 
 fn main() {
     let mut framebuffer = Framebuffer::new("/dev/fb0").unwrap();
@@ -17,7 +17,7 @@ fn main() {
     //Disable text mode in current tty
     let _ = Framebuffer::set_kd_mode(KdMode::Graphics).unwrap();
 
-    for offset in 0 .. w - img.get_width() {
+    for offset in 0..w - img.get_width() {
         for (x, y) in img.coordinates() {
             let px = img.get_pixel(x, y);
             let start_index = (y * line_length + (offset + x) * bytespp) as usize;
@@ -28,7 +28,7 @@ fn main() {
 
         let _ = framebuffer.write_frame(&frame);
     }
-    
+
     //Reenable text mode in current tty
     let _ = Framebuffer::set_kd_mode(KdMode::Text).unwrap();
 }

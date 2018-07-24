@@ -6,12 +6,12 @@ extern crate memmap;
 
 use libc::ioctl;
 
-use std::fmt;
-use std::path::Path;
-use std::io::Write;
-use std::fs::{OpenOptions, File};
-use std::os::unix::io::AsRawFd;
 use std::error::Error;
+use std::fmt;
+use std::fs::{File, OpenOptions};
+use std::io::Write;
+use std::os::unix::io::AsRawFd;
+use std::path::Path;
 
 use memmap::{Mmap, Protection};
 
@@ -36,7 +36,7 @@ pub struct Bitfield {
 #[repr(C)]
 #[derive(Clone, Debug)]
 pub struct VarScreeninfo {
-    pub xres: u32,    
+    pub xres: u32,
     pub yres: u32,
     pub xres_virtual: u32,
     pub yres_virtual: u32,
@@ -67,7 +67,6 @@ pub struct VarScreeninfo {
     pub reserved: [u32; 4],
 }
 
-
 ///Struct as defined in /usr/include/linux/fb.h Note: type is a keyword in Rust and therefore has been
 ///changed to fb_type.
 #[repr(C)]
@@ -91,15 +90,21 @@ pub struct FixScreeninfo {
 }
 
 impl ::std::default::Default for Bitfield {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self {
+        unsafe { ::std::mem::zeroed() }
+    }
 }
 
 impl ::std::default::Default for VarScreeninfo {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self {
+        unsafe { ::std::mem::zeroed() }
+    }
 }
 
 impl ::std::default::Default for FixScreeninfo {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self {
+        unsafe { ::std::mem::zeroed() }
+    }
 }
 
 ///Enum that can be used to set the current KdMode.
@@ -123,7 +128,10 @@ pub struct FramebufferError {
 
 impl FramebufferError {
     fn new(kind: FramebufferErrorKind, details: &str) -> FramebufferError {
-        FramebufferError { kind, details: String::from(details) }
+        FramebufferError {
+            kind,
+            details: String::from(details),
+        }
     }
 }
 
@@ -157,7 +165,12 @@ pub struct Framebuffer {
 
 impl Framebuffer {
     pub fn new<P: AsRef<Path>>(path_to_device: P) -> Result<Framebuffer, FramebufferError> {
-        let device = try!(OpenOptions::new().read(true).write(true).open(path_to_device));
+        let device = try!(
+            OpenOptions::new()
+                .read(true)
+                .write(true)
+                .open(path_to_device)
+        );
 
         let var_screen_info = try!(Framebuffer::get_var_screeninfo(&device));
         let fix_screen_info = try!(Framebuffer::get_fix_screeninfo(&device));
@@ -165,25 +178,27 @@ impl Framebuffer {
         let frame_length = (fix_screen_info.line_length * var_screen_info.yres) as usize;
         let frame = Mmap::open_with_offset(&device, Protection::ReadWrite, 0, frame_length);
         match frame {
-            Ok(frame_result) => 
-                Ok(Framebuffer {
-                    device,
-                    frame: frame_result,
-                    var_screen_info,
-                    fix_screen_info,
-                }),
-                Err(_) => Err(
-                    FramebufferError::new(
-                    FramebufferErrorKind::IoError,
-                    &format!("Could not map memory! Mem start: {} Mem stop: {}", 0, frame_length))
+            Ok(frame_result) => Ok(Framebuffer {
+                device,
+                frame: frame_result,
+                var_screen_info,
+                fix_screen_info,
+            }),
+            Err(_) => Err(FramebufferError::new(
+                FramebufferErrorKind::IoError,
+                &format!(
+                    "Could not map memory! Mem start: {} Mem stop: {}",
+                    0, frame_length
                 ),
+            )),
         }
-
     }
 
     ///Writes a frame to the Framebuffer.
     pub fn write_frame(&mut self, frame: &[u8]) {
-        unsafe { self.frame.as_mut_slice() }.write_all(frame).unwrap();
+        unsafe { self.frame.as_mut_slice() }
+            .write_all(frame)
+            .unwrap();
     }
 
     ///Creates a FixScreeninfo struct and fills it using ioctl.
@@ -191,7 +206,10 @@ impl Framebuffer {
         let mut info: FixScreeninfo = Default::default();
         let result = unsafe { ioctl(device.as_raw_fd(), FBIOGET_FSCREENINFO, &mut info) };
         match result {
-            -1 => Err(FramebufferError::new(FramebufferErrorKind::IoctlFailed, "Ioctl returned -1")),
+            -1 => Err(FramebufferError::new(
+                FramebufferErrorKind::IoctlFailed,
+                "Ioctl returned -1",
+            )),
             _ => Ok(info),
         }
     }
@@ -201,14 +219,23 @@ impl Framebuffer {
         let mut info: VarScreeninfo = Default::default();
         let result = unsafe { ioctl(device.as_raw_fd(), FBIOGET_VSCREENINFO, &mut info) };
         match result {
-            -1 => Err(FramebufferError::new(FramebufferErrorKind::IoctlFailed, "Ioctl returned -1")),
+            -1 => Err(FramebufferError::new(
+                FramebufferErrorKind::IoctlFailed,
+                "Ioctl returned -1",
+            )),
             _ => Ok(info),
         }
     }
 
-    pub fn put_var_screeninfo(device: &File, screeninfo: &VarScreeninfo) -> Result<i32, FramebufferError> {
+    pub fn put_var_screeninfo(
+        device: &File,
+        screeninfo: &VarScreeninfo,
+    ) -> Result<i32, FramebufferError> {
         match unsafe { ioctl(device.as_raw_fd(), FBIOPUT_VSCREENINFO, &screeninfo) } {
-            -1 => Err(FramebufferError::new(FramebufferErrorKind::IoctlFailed, "Ioctl returned -1")),
+            -1 => Err(FramebufferError::new(
+                FramebufferErrorKind::IoctlFailed,
+                "Ioctl returned -1",
+            )),
             ret => Ok(ret),
         }
     }
@@ -217,7 +244,10 @@ impl Framebuffer {
     ///done!
     pub fn set_kd_mode(kd_mode: KdMode) -> Result<i32, FramebufferError> {
         match unsafe { ioctl(0, KDSETMODE, kd_mode) } {
-            -1 => Err(FramebufferError::new(FramebufferErrorKind::IoctlFailed, "Ioctl returned -1")),
+            -1 => Err(FramebufferError::new(
+                FramebufferErrorKind::IoctlFailed,
+                "Ioctl returned -1",
+            )),
             ret => Ok(ret),
         }
     }
