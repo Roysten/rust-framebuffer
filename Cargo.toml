@@ -1,6 +1,6 @@
 [package]
 name = "framebuffer"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Roy van der Vegt <royvandervegt@gmail.com>"]
 description = """
 Basic framebuffer abstraction. Handles the necessary ioctls and mmaps the framebuffer device.

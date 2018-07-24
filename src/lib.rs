@@ -7,6 +7,7 @@ extern crate memmap;
 use libc::ioctl;
 
 use std::fmt;
+use std::path::Path;
 use std::io::Write;
 use std::fs::{OpenOptions, File};
 use std::os::unix::io::AsRawFd;
@@ -122,7 +123,7 @@ pub struct FramebufferError {
 
 impl FramebufferError {
     fn new(kind: FramebufferErrorKind, details: &str) -> FramebufferError {
-        FramebufferError { kind: kind, details: String::from(details) }
+        FramebufferError { kind, details: String::from(details) }
     }
 }
 
@@ -155,7 +156,7 @@ pub struct Framebuffer {
 }
 
 impl Framebuffer {
-    pub fn new(path_to_device: &str) -> Result<Framebuffer, FramebufferError> {
+    pub fn new<P: AsRef<Path>>(path_to_device: P) -> Result<Framebuffer, FramebufferError> {
         let device = try!(OpenOptions::new().read(true).write(true).open(path_to_device));
 
         let var_screen_info = try!(Framebuffer::get_var_screeninfo(&device));
@@ -166,10 +167,10 @@ impl Framebuffer {
         match frame {
             Ok(frame_result) => 
                 Ok(Framebuffer {
-                    device: device,
+                    device,
                     frame: frame_result,
-                    var_screen_info: var_screen_info,
-                    fix_screen_info: fix_screen_info,
+                    var_screen_info,
+                    fix_screen_info,
                 }),
                 Err(_) => Err(
                     FramebufferError::new(
