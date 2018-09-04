@@ -9,7 +9,7 @@ use libc::ioctl;
 use std::error::Error;
 use std::fmt;
 use std::fs::{File, OpenOptions};
-use std::io::Write;
+use std::io::{Read, Write};
 use std::os::unix::io::AsRawFd;
 use std::path::Path;
 
@@ -198,6 +198,13 @@ impl Framebuffer {
     pub fn write_frame(&mut self, frame: &[u8]) {
         unsafe { self.frame.as_mut_slice() }
             .write_all(frame)
+            .unwrap();
+    }
+
+    ///Reads a frame from the Framebuffer.
+    pub fn read_frame(&mut self, frame: &mut Vec<u8>) {
+        unsafe { self.frame.as_slice() }
+            .read_to_end(frame)
             .unwrap();
     }
 
