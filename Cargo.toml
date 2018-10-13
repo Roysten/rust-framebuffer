@@ -33,6 +33,10 @@ path = "examples/mandelbrot/main.rs"
 name = "sierpinski"
 path = "examples/sierpinski/main.rs"
 
+[[example]]
+name = "acpi-bgrt"
+path = "examples/acpi-bgrt/main.rs"
+
 [dev_dependencies]
 bmp = "0.1.4"
 rand = "0.3.12"
