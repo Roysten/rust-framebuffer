@@ -251,4 +251,25 @@ impl Framebuffer {
             ret => Ok(ret),
         }
     }
+
+    /// Allows setting tty mode from non-terminal session by explicitly specifying device name
+    pub fn set_kd_mode_ex<P: AsRef<Path>>(
+        path_to_device: P,
+        kd_mode: KdMode
+    ) -> Result<i32, FramebufferError> {
+        let device = try!(
+            OpenOptions::new()
+                .read(true)
+                .write(true)
+                .open(path_to_device)
+        );
+
+        match unsafe { ioctl(device.as_raw_fd(), KDSETMODE, kd_mode) } {
+            -1 => Err(FramebufferError::new(
+                FramebufferErrorKind::IoctlFailed,
+                "Ioctl returned -1",
+            )),
+            ret => Ok(ret),
+        }
+    }
 }
