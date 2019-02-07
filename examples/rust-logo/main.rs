@@ -15,7 +15,7 @@ fn main() {
     let img = bmp::open("examples/rust-logo/rust-logo.bmp").unwrap();
 
     //Disable text mode in current tty
-    let _ = Framebuffer::set_kd_mode_ex("/dev/console", KdMode::Graphics).unwrap();
+    let _ = Framebuffer::set_kd_mode(KdMode::Graphics).unwrap();
 
     for offset in 0..w - img.get_width() {
         for (x, y) in img.coordinates() {
@@ -30,5 +30,5 @@ fn main() {
     }
 
     //Reenable text mode in current tty
-    let _ = Framebuffer::set_kd_mode_ex("/dev/console", KdMode::Text).unwrap();
+    let _ = Framebuffer::set_kd_mode(KdMode::Text).unwrap();
 }
