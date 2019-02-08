@@ -84,10 +84,10 @@ impl Star {
         let hh = h as f32 / 4.0;
 
         let mut rng = rand::thread_rng();
-        self.x = rng.gen_range::<f32>(-wh, wh);
-        self.b = rng.gen_range::<f32>(-hh, hh);
+        self.x = rng.gen_range(-wh, wh);
+        self.b = rng.gen_range(-hh, hh);
         self.a = self.b / self.x;
-        self.z = rng.gen_range::<f32>(1.0, 1.001);
+        self.z = rng.gen_range(1.0, 1.001);
     }
 
     fn get_pos(&self, w: usize, h: usize) -> (usize, usize) {
@@ -112,7 +112,7 @@ impl Star {
 fn main() {
     let mut framebuffer = Framebuffer::new("/dev/fb0").unwrap();
 
-    let w = framebuffer.var_screen_info.xres;
+    let _w = framebuffer.var_screen_info.xres;
     let h = framebuffer.var_screen_info.yres;
     let line_length = framebuffer.fix_screen_info.line_length;
     let mut frame = vec![0u8; (line_length * h) as usize];

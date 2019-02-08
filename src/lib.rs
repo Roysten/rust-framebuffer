@@ -165,15 +165,13 @@ pub struct Framebuffer {
 
 impl Framebuffer {
     pub fn new<P: AsRef<Path>>(path_to_device: P) -> Result<Framebuffer, FramebufferError> {
-        let device = try!(
-            OpenOptions::new()
+        let device = OpenOptions::new()
                 .read(true)
                 .write(true)
-                .open(path_to_device)
-        );
+                .open(path_to_device)?;
 
-        let var_screen_info = try!(Framebuffer::get_var_screeninfo(&device));
-        let fix_screen_info = try!(Framebuffer::get_fix_screeninfo(&device));
+        let var_screen_info = Framebuffer::get_var_screeninfo(&device)?;
+        let fix_screen_info = Framebuffer::get_fix_screeninfo(&device)?;
 
         let frame_length = (fix_screen_info.line_length * var_screen_info.yres) as usize;
         let frame = Mmap::open_with_offset(&device, Protection::ReadWrite, 0, frame_length);
@@ -244,6 +242,25 @@ impl Framebuffer {
     ///done!
     pub fn set_kd_mode(kd_mode: KdMode) -> Result<i32, FramebufferError> {
         match unsafe { ioctl(0, KDSETMODE, kd_mode) } {
+            -1 => Err(FramebufferError::new(
+                FramebufferErrorKind::IoctlFailed,
+                "Ioctl returned -1",
+            )),
+            ret => Ok(ret),
+        }
+    }
+
+    /// Allows setting tty mode from non-terminal session by explicitly specifying device name
+    pub fn set_kd_mode_ex<P: AsRef<Path>>(
+        path_to_device: P,
+        kd_mode: KdMode
+    ) -> Result<i32, FramebufferError> {
+        let device = OpenOptions::new()
+                .read(true)
+                .write(true)
+                .open(path_to_device)?;
+
+        match unsafe { ioctl(device.as_raw_fd(), KDSETMODE, kd_mode) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
                 "Ioctl returned -1",

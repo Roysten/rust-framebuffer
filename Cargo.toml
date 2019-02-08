@@ -2,6 +2,7 @@
 name = "framebuffer"
 version = "0.1.7"
 authors = ["Roy van der Vegt <royvandervegt@gmail.com>"]
+edition = "2018"
 description = """
 Basic framebuffer abstraction. Handles the necessary ioctls and mmaps the framebuffer device.
 """
@@ -35,4 +36,4 @@ path = "examples/sierpinski/main.rs"
 
 [dev_dependencies]
 bmp = "0.1.4"
-rand = "0.3.12"
+rand = "0.6"
