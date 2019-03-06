@@ -9,9 +9,10 @@ use libc::ioctl;
 use std::error::Error;
 use std::fmt;
 use std::fs::{File, OpenOptions};
-use std::io::Write;
+use std::io::{Read, Write};
 use std::os::unix::io::AsRawFd;
 use std::path::Path;
+use std::ops::Index;
 
 use memmap::{Mmap, Protection};
 
@@ -199,6 +200,13 @@ impl Framebuffer {
             .unwrap();
     }
 
+    ///Reads a frame from the Framebuffer.
+    pub fn read_frame(&self, frame: &mut Vec<u8>) {
+        unsafe { self.frame.as_slice() }
+            .read_to_end(frame)
+            .unwrap();
+    }
+
     ///Creates a FixScreeninfo struct and fills it using ioctl.
     pub fn get_fix_screeninfo(device: &File) -> Result<FixScreeninfo, FramebufferError> {
         let mut info: FixScreeninfo = Default::default();
@@ -267,5 +275,14 @@ impl Framebuffer {
             )),
             ret => Ok(ret),
         }
+    }
+}
+
+impl Index<usize> for Framebuffer {
+    type Output = u8;
+
+    fn index(&self, index: usize) -> &u8 {
+        unsafe { self.frame.as_slice() }
+            .index(index)
     }
 }
