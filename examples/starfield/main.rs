@@ -17,7 +17,10 @@ impl Starfield {
         let w = framebuffer.var_screen_info.xres as usize;
         let h = framebuffer.var_screen_info.yres as usize;
 
-        let stars = [Star::new_rand(w, h); STAR_COUNT];
+        let mut stars = [Star{a: 0.0, b: 0.0, x: 0.0, z: 0.0}; STAR_COUNT];
+        for star in stars.iter_mut() {
+            *star = Star::new_rand(w, h);
+        }
         Starfield { stars: stars }
     }
 
@@ -86,7 +89,9 @@ impl Star {
         let mut rng = rand::thread_rng();
         self.x = rng.gen_range(-wh, wh);
         self.b = rng.gen_range(-hh, hh);
-        self.a = self.b / self.x;
+        if self.x != 0.0 {
+            self.a = self.b / self.x;
+        }
         self.z = rng.gen_range(1.0, 1.001);
     }
 

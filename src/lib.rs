@@ -9,11 +9,10 @@ use libc::ioctl;
 use std::error::Error;
 use std::fmt;
 use std::fs::{File, OpenOptions};
-use std::io::Write;
 use std::os::unix::io::AsRawFd;
 use std::path::Path;
 
-use memmap::{Mmap, Protection};
+use memmap::{MmapMut, MmapOptions};
 
 const FBIOGET_VSCREENINFO: libc::c_ulong = 0x4600;
 const FBIOPUT_VSCREENINFO: libc::c_ulong = 0x4601;
@@ -158,7 +157,7 @@ impl std::convert::From<std::io::Error> for FramebufferError {
 #[derive(Debug)]
 pub struct Framebuffer {
     pub device: File,
-    pub frame: Mmap,
+    pub frame: MmapMut,
     pub var_screen_info: VarScreeninfo,
     pub fix_screen_info: FixScreeninfo,
 }
@@ -166,15 +165,15 @@ pub struct Framebuffer {
 impl Framebuffer {
     pub fn new<P: AsRef<Path>>(path_to_device: P) -> Result<Framebuffer, FramebufferError> {
         let device = OpenOptions::new()
-                .read(true)
-                .write(true)
-                .open(path_to_device)?;
+            .read(true)
+            .write(true)
+            .open(path_to_device)?;
 
         let var_screen_info = Framebuffer::get_var_screeninfo(&device)?;
         let fix_screen_info = Framebuffer::get_fix_screeninfo(&device)?;
 
         let frame_length = (fix_screen_info.line_length * var_screen_info.yres) as usize;
-        let frame = Mmap::open_with_offset(&device, Protection::ReadWrite, 0, frame_length);
+        let frame = unsafe { MmapOptions::new().len(frame_length).map_mut(&device) };
         match frame {
             Ok(frame_result) => Ok(Framebuffer {
                 device,
@@ -184,19 +183,19 @@ impl Framebuffer {
             }),
             Err(_) => Err(FramebufferError::new(
                 FramebufferErrorKind::IoError,
-                &format!(
-                    "Could not map memory! Mem start: {} Mem stop: {}",
-                    0, frame_length
-                ),
+                &format!("Failed to map memory (offset: {} len: {})", 0, frame_length),
             )),
         }
     }
 
     ///Writes a frame to the Framebuffer.
     pub fn write_frame(&mut self, frame: &[u8]) {
-        unsafe { self.frame.as_mut_slice() }
-            .write_all(frame)
-            .unwrap();
+        self.frame[..].copy_from_slice(&frame[..]);
+    }
+
+    ///Reads a frame from the framebuffer.
+    pub fn read_frame(&self) -> &[u8] {
+        &self.frame[..]
     }
 
     ///Creates a FixScreeninfo struct and fills it using ioctl.
@@ -253,12 +252,12 @@ impl Framebuffer {
     /// Allows setting tty mode from non-terminal session by explicitly specifying device name
     pub fn set_kd_mode_ex<P: AsRef<Path>>(
         path_to_device: P,
-        kd_mode: KdMode
+        kd_mode: KdMode,
     ) -> Result<i32, FramebufferError> {
         let device = OpenOptions::new()
-                .read(true)
-                .write(true)
-                .open(path_to_device)?;
+            .read(true)
+            .write(true)
+            .open(path_to_device)?;
 
         match unsafe { ioctl(device.as_raw_fd(), KDSETMODE, kd_mode) } {
             -1 => Err(FramebufferError::new(

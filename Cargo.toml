@@ -1,6 +1,6 @@
 [package]
 name = "framebuffer"
-version = "0.1.8"
+version = "0.1.9"
 authors = ["Roy van der Vegt <royvandervegt@gmail.com>"]
 edition = "2018"
 description = """
@@ -16,7 +16,7 @@ path = "src/lib.rs"
 
 [dependencies]
 libc = "0.2"
-memmap = "0.5"
+memmap = "0.7"
 
 [[example]]
 name = "rust-logo"
