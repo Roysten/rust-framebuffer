@@ -201,7 +201,7 @@ impl Framebuffer {
     ///Creates a FixScreeninfo struct and fills it using ioctl.
     pub fn get_fix_screeninfo(device: &File) -> Result<FixScreeninfo, FramebufferError> {
         let mut info: FixScreeninfo = Default::default();
-        let result = unsafe { ioctl(device.as_raw_fd(), FBIOGET_FSCREENINFO, &mut info) };
+        let result = unsafe { ioctl(device.as_raw_fd(), FBIOGET_FSCREENINFO as _, &mut info) };
         match result {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
@@ -214,7 +214,7 @@ impl Framebuffer {
     ///Creates a VarScreeninfo struct and fills it using ioctl.
     pub fn get_var_screeninfo(device: &File) -> Result<VarScreeninfo, FramebufferError> {
         let mut info: VarScreeninfo = Default::default();
-        let result = unsafe { ioctl(device.as_raw_fd(), FBIOGET_VSCREENINFO, &mut info) };
+        let result = unsafe { ioctl(device.as_raw_fd(), FBIOGET_VSCREENINFO as _, &mut info) };
         match result {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
@@ -228,7 +228,7 @@ impl Framebuffer {
         device: &File,
         screeninfo: &VarScreeninfo,
     ) -> Result<i32, FramebufferError> {
-        match unsafe { ioctl(device.as_raw_fd(), FBIOPUT_VSCREENINFO, &screeninfo) } {
+        match unsafe { ioctl(device.as_raw_fd(), FBIOPUT_VSCREENINFO as _, &screeninfo) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
                 "Ioctl returned -1",
@@ -240,7 +240,7 @@ impl Framebuffer {
     ///Sets the tty graphics mode. Make sure to change it back to KdMode::Text after the program is
     ///done!
     pub fn set_kd_mode(kd_mode: KdMode) -> Result<i32, FramebufferError> {
-        match unsafe { ioctl(0, KDSETMODE, kd_mode) } {
+        match unsafe { ioctl(0, KDSETMODE as _, kd_mode) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
                 "Ioctl returned -1",
@@ -259,7 +259,7 @@ impl Framebuffer {
             .write(true)
             .open(path_to_device)?;
 
-        match unsafe { ioctl(device.as_raw_fd(), KDSETMODE, kd_mode) } {
+        match unsafe { ioctl(device.as_raw_fd(), KDSETMODE as _, kd_mode) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
                 "Ioctl returned -1",
