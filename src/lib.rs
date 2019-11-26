@@ -228,7 +228,7 @@ impl Framebuffer {
         device: &File,
         screeninfo: &VarScreeninfo,
     ) -> Result<i32, FramebufferError> {
-        match unsafe { ioctl(device.as_raw_fd(), FBIOPUT_VSCREENINFO as _, &screeninfo) } {
+        match unsafe { ioctl(device.as_raw_fd(), FBIOPUT_VSCREENINFO as _, screeninfo) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
                 "Ioctl returned -1",
