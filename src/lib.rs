@@ -6,7 +6,6 @@ extern crate memmap;
 
 use libc::ioctl;
 
-use std::error::Error;
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::os::unix::io::AsRawFd;
@@ -142,13 +141,13 @@ impl std::error::Error for FramebufferError {
 
 impl fmt::Display for FramebufferError {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "{}", self.description())
+        write!(fmt, "{}", self.to_string())
     }
 }
 
 impl std::convert::From<std::io::Error> for FramebufferError {
     fn from(err: std::io::Error) -> FramebufferError {
-        FramebufferError::new(FramebufferErrorKind::IoError, err.description())
+        FramebufferError::new(FramebufferErrorKind::IoError, &err.to_string())
     }
 }
 
