@@ -1,7 +1,7 @@
 extern crate framebuffer;
 extern crate rand;
 
-use framebuffer::{Framebuffer, KdMode};
+use framebuffer::Framebuffer;
 use rand::Rng;
 
 const STAR_SPEED: f32 = 1.003;
@@ -17,7 +17,12 @@ impl Starfield {
         let w = framebuffer.var_screen_info.xres as usize;
         let h = framebuffer.var_screen_info.yres as usize;
 
-        let mut stars = [Star{a: 0.0, b: 0.0, x: 0.0, z: 0.0}; STAR_COUNT];
+        let mut stars = [Star {
+            a: 0.0,
+            b: 0.0,
+            x: 0.0,
+            z: 0.0,
+        }; STAR_COUNT];
         for star in stars.iter_mut() {
             *star = Star::new_rand(w, h);
         }
