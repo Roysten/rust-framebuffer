@@ -108,7 +108,7 @@ impl Star {
 
     fn tick(&mut self, w: usize, h: usize) -> (usize, usize, f32) {
         let mut pos = self.get_pos(w, h);
-        if pos.0 >= w || pos.1 >= h {
+        if pos.0 >= w || pos.1 >= h || pos.0 == 0 || pos.1 == 0 {
             self.init(w, h);
             pos = self.get_pos(w, h);
         }
