@@ -11,6 +11,7 @@ use std::fs::{File, OpenOptions};
 use std::os::unix::io::AsRawFd;
 use std::path::Path;
 
+use errno::errno;
 use memmap::{MmapMut, MmapOptions};
 
 const FBIOGET_VSCREENINFO: libc::c_ulong = 0x4600;
@@ -204,7 +205,7 @@ impl Framebuffer {
         match result {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
-                "Ioctl returned -1",
+                &format!("Ioctl returned -1: {}", errno()),
             )),
             _ => Ok(info),
         }
@@ -217,7 +218,7 @@ impl Framebuffer {
         match result {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
-                "Ioctl returned -1",
+                &format!("Ioctl returned -1: {}", errno()),
             )),
             _ => Ok(info),
         }
@@ -230,7 +231,7 @@ impl Framebuffer {
         match unsafe { ioctl(device.as_raw_fd(), FBIOPUT_VSCREENINFO as _, screeninfo) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
-                "Ioctl returned -1",
+                &format!("Ioctl returned -1: {}", errno()),
             )),
             ret => Ok(ret),
         }
@@ -242,7 +243,7 @@ impl Framebuffer {
         match unsafe { ioctl(0, KDSETMODE as _, kd_mode) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
-                "Ioctl returned -1",
+                &format!("Ioctl returned -1: {}", errno()),
             )),
             ret => Ok(ret),
         }
@@ -261,7 +262,7 @@ impl Framebuffer {
         match unsafe { ioctl(device.as_raw_fd(), KDSETMODE as _, kd_mode) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
-                "Ioctl returned -1",
+                &format!("Ioctl returned -1: {}", errno()),
             )),
             ret => Ok(ret),
         }
