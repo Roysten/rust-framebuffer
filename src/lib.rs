@@ -17,6 +17,7 @@ use memmap::{MmapMut, MmapOptions};
 const FBIOGET_VSCREENINFO: libc::c_ulong = 0x4600;
 const FBIOPUT_VSCREENINFO: libc::c_ulong = 0x4601;
 const FBIOGET_FSCREENINFO: libc::c_ulong = 0x4602;
+const FBIOPAN_DISPLAY: libc::c_ulong = 0x4606;
 
 const KDSETMODE: libc::c_ulong = 0x4B3A;
 const KD_TEXT: libc::c_ulong = 0x00;
@@ -229,6 +230,19 @@ impl Framebuffer {
         screeninfo: &VarScreeninfo,
     ) -> Result<i32, FramebufferError> {
         match unsafe { ioctl(device.as_raw_fd(), FBIOPUT_VSCREENINFO as _, screeninfo) } {
+            -1 => Err(FramebufferError::new(
+                FramebufferErrorKind::IoctlFailed,
+                &format!("Ioctl returned -1: {}", errno()),
+            )),
+            ret => Ok(ret),
+        }
+    }
+
+    pub fn pan_display(
+        device: &File,
+        screeninfo: &VarScreeninfo,
+    ) -> Result<i32, FramebufferError> {
+        match unsafe { ioctl(device.as_raw_fd(), FBIOPAN_DISPLAY as _, screeninfo) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,
                 &format!("Ioctl returned -1: {}", errno()),
