@@ -172,7 +172,7 @@ impl Framebuffer {
         let var_screen_info = Framebuffer::get_var_screeninfo(&device)?;
         let fix_screen_info = Framebuffer::get_fix_screeninfo(&device)?;
 
-        let frame_length = (fix_screen_info.line_length * var_screen_info.yres) as usize;
+        let frame_length = (fix_screen_info.line_length * var_screen_info.yres_virtual) as usize;
         let frame = unsafe { MmapOptions::new().len(frame_length).map_mut(&device) };
         match frame {
             Ok(frame_result) => Ok(Framebuffer {
