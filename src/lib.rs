@@ -143,7 +143,7 @@ impl std::error::Error for FramebufferError {
 
 impl fmt::Display for FramebufferError {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "{}", self.to_string())
+        write!(fmt, "{}", self.details)
     }
 }
 
