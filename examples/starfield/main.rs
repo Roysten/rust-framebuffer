@@ -21,7 +21,8 @@ impl Starfield {
             a: 0.0,
             b: 0.0,
             x: 0.0,
-            z: 0.0,
+            size: 0.0,
+            color: (255, 255, 255),
         }; STAR_COUNT];
         for star in stars.iter_mut() {
             *star = Star::new_rand(w, h);
@@ -34,14 +35,13 @@ impl Starfield {
         let h = framebuffer.var_screen_info.yres as usize;
 
         for star in self.stars.iter_mut() {
-            let star_data = star.tick(w, h);
-            if star_data.0 < w && star_data.1 < h {
-                Starfield::draw_star(star_data, framebuffer, frame);
-            }
+            Starfield::draw_star(&star, framebuffer, frame, (0, 0, 0));
+            star.tick(w, h);
+            Starfield::draw_star(&star, framebuffer, frame, star.color);
         }
     }
 
-    fn draw_star(star_data: (usize, usize, f32), framebuffer: &Framebuffer, frame: &mut [u8]) {
+    fn draw_star(star_data: &Star, framebuffer: &Framebuffer, frame: &mut [u8], color: (u8, u8, u8)) {
         let w = framebuffer.var_screen_info.xres as usize;
         let h = framebuffer.var_screen_info.yres as usize;
 
@@ -54,13 +54,15 @@ impl Starfield {
             };
         }
 
-        let dim = star_data.2 as usize;
+        let pos = star_data.get_pos(w, h);
+
+        let dim = star_data.size as usize;
         for i in 0..dim {
             for j in 0..dim {
-                if star_data.0 + i < w && star_data.1 + j < h {
-                    frame[coords_to_index!(star_data.0 + i, star_data.1 + j)] = 255;
-                    frame[coords_to_index!(star_data.0 + i, star_data.1 + j) + 1] = 255;
-                    frame[coords_to_index!(star_data.0 + i, star_data.1 + j) + 2] = 255;
+                if pos.0 + i < w && pos.1 + j < h {
+                    frame[coords_to_index!(pos.0 + i, pos.1 + j)] = color.0;
+                    frame[coords_to_index!(pos.0 + i, pos.1 + j) + 1] = color.1;
+                    frame[coords_to_index!(pos.0 + i, pos.1 + j) + 2] = color.2;
                 }
             }
         }
@@ -69,10 +71,11 @@ impl Starfield {
 
 #[derive(Clone, Copy)]
 struct Star {
+    color: (u8, u8, u8),
     a: f32,
     b: f32,
     x: f32,
-    z: f32,
+    size: f32,
 }
 
 impl Star {
@@ -81,7 +84,8 @@ impl Star {
             a: 0.0,
             x: 0.0,
             b: 0.0,
-            z: 0.0,
+            size: 0.0,
+            color: (0, 0, 0),
         };
         star.init(w, h);
         star
@@ -92,12 +96,15 @@ impl Star {
         let hh = h as f32 / 4.0;
 
         let mut rng = rand::thread_rng();
-        self.x = rng.gen_range(-wh, wh);
-        self.b = rng.gen_range(-hh, hh);
+        self.x = rng.gen_range(-wh..wh);
+        self.b = rng.gen_range(-hh..hh);
         if self.x != 0.0 {
             self.a = self.b / self.x;
         }
-        self.z = rng.gen_range(1.0, 1.001);
+        self.size = rng.gen_range(1.0..1.001);
+        self.color.0 = rng.gen_range(128..255);
+        self.color.1 = rng.gen_range(128..255);
+        self.color.2 = rng.gen_range(128..255);
     }
 
     fn get_pos(&self, w: usize, h: usize) -> (usize, usize) {
@@ -106,24 +113,22 @@ impl Star {
         (x_coord, y_coord)
     }
 
-    fn tick(&mut self, w: usize, h: usize) -> (usize, usize, f32) {
-        let mut pos = self.get_pos(w, h);
+    fn tick(&mut self, w: usize, h: usize) {
+        let pos = self.get_pos(w, h);
         if pos.0 >= w || pos.1 >= h || pos.0 == 0 || pos.1 == 0 {
             self.init(w, h);
-            pos = self.get_pos(w, h);
         }
 
         self.x *= STAR_SPEED;
-        self.z *= STAR_GROWTH;
-        (pos.0, pos.1, self.z)
+        self.size *= STAR_GROWTH;
     }
 }
 
 fn main() {
     let mut framebuffer = Framebuffer::new("/dev/fb0").unwrap();
 
-    let _w = framebuffer.var_screen_info.xres;
-    let h = framebuffer.var_screen_info.yres;
+    let _w = framebuffer.var_screen_info.xres_virtual;
+    let h = framebuffer.var_screen_info.yres_virtual;
     let line_length = framebuffer.fix_screen_info.line_length;
     let mut frame = vec![0u8; (line_length * h) as usize];
 
@@ -133,9 +138,6 @@ fn main() {
     //let _ = Framebuffer::set_kd_mode(KdMode::Graphics).unwrap();
 
     loop {
-        for x in frame.iter_mut() {
-            *x = 0;
-        }
         starfield.tick(&framebuffer, &mut frame);
         let _ = framebuffer.write_frame(&frame);
     }
