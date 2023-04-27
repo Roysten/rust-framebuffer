@@ -37,4 +37,4 @@ path = "examples/sierpinski/main.rs"
 
 [dev_dependencies]
 bmp = "0.1.4"
-rand = "0.6"
+rand = "0.8"
