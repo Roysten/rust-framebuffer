@@ -1,9 +1,5 @@
 //!Simple linux framebuffer abstraction.
 //!Examples can be found [here](https://github.com/Roysten/rust-framebuffer/tree/master/examples).
-
-extern crate libc;
-extern crate memmap2;
-
 use libc::ioctl;
 
 use std::fmt;

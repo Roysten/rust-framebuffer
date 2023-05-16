@@ -26,7 +26,7 @@ fn main() {
             frame[start_index + 2] = px.r;
         }
 
-        let _ = framebuffer.write_frame(&frame);
+        framebuffer.write_frame(&frame);
     }
 
     //Reenable text mode in current tty

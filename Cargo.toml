@@ -2,7 +2,7 @@
 name = "framebuffer"
 version = "0.3.1"
 authors = ["Roy van der Vegt <royvandervegt@gmail.com>"]
-edition = "2018"
+edition = "2021"
 description = """
 Basic framebuffer abstraction. Handles the necessary ioctls and mmaps the framebuffer device.
 """
