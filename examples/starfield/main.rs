@@ -41,7 +41,12 @@ impl Starfield {
         }
     }
 
-    fn draw_star(star_data: &Star, framebuffer: &Framebuffer, frame: &mut [u8], color: (u8, u8, u8)) {
+    fn draw_star(
+        star_data: &Star,
+        framebuffer: &Framebuffer,
+        frame: &mut [u8],
+        color: (u8, u8, u8),
+    ) {
         let w = framebuffer.var_screen_info.xres as usize;
         let h = framebuffer.var_screen_info.yres as usize;
 

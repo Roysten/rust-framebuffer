@@ -16,7 +16,7 @@ path = "src/lib.rs"
 
 [dependencies]
 libc = "0.2"
-memmap = "0.7"
+memmap2 = "0.6.1"
 errno = "0.2.7"
 
 [[example]]
