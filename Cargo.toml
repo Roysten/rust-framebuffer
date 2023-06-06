@@ -17,7 +17,7 @@ path = "src/lib.rs"
 [dependencies]
 libc = "0.2"
 memmap2 = "0.6.1"
-errno = "0.2.7"
+errno = "0.3"
 
 [[example]]
 name = "rust-logo"
