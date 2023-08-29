@@ -1,14 +1,14 @@
 # rust-framebuffer
 Basic framebuffer abstraction for Rust.
 
-An example can be found in the examples directory. Use the following command to compile and run:
-```
-sudo cargo run --release --example rust-logo
+To be able to use this library, you have to add yourself to the `video` group:
+```console
+$ sudo usermod -aG video "$USER"
 ```
 
-To avoid having to run all commands as root, you can add yourself to the video group:
-```
-sudo usermod -aG video <username>
+An example can be found in the examples directory. Use the following command to compile and run:
+```console
+$ cargo run --release --example rust-logo
 ```
 
 Make sure to check out the starfield example as well!
