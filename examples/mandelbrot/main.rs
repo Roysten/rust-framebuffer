@@ -1,5 +1,3 @@
-extern crate framebuffer;
-
 use framebuffer::{Framebuffer, KdMode};
 
 //Algorithm copied from:
@@ -40,7 +38,7 @@ fn main() {
         }
     }
 
-    let _ = framebuffer.write_frame(&frame);
+    framebuffer.write_frame(&frame);
 
     std::io::stdin().read_line(&mut String::new()).unwrap();
     let _ = Framebuffer::set_kd_mode(KdMode::Text).unwrap();

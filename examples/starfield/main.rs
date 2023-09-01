@@ -1,6 +1,3 @@
-extern crate framebuffer;
-extern crate rand;
-
 use framebuffer::Framebuffer;
 use rand::Rng;
 
@@ -27,7 +24,7 @@ impl Starfield {
         for star in stars.iter_mut() {
             *star = Star::new_rand(w, h);
         }
-        Starfield { stars: stars }
+        Starfield { stars }
     }
 
     fn tick(&mut self, framebuffer: &Framebuffer, frame: &mut [u8]) {
@@ -35,13 +32,18 @@ impl Starfield {
         let h = framebuffer.var_screen_info.yres as usize;
 
         for star in self.stars.iter_mut() {
-            Starfield::draw_star(&star, framebuffer, frame, (0, 0, 0));
+            Starfield::draw_star(star, framebuffer, frame, (0, 0, 0));
             star.tick(w, h);
-            Starfield::draw_star(&star, framebuffer, frame, star.color);
+            Starfield::draw_star(star, framebuffer, frame, star.color);
         }
     }
 
-    fn draw_star(star_data: &Star, framebuffer: &Framebuffer, frame: &mut [u8], color: (u8, u8, u8)) {
+    fn draw_star(
+        star_data: &Star,
+        framebuffer: &Framebuffer,
+        frame: &mut [u8],
+        color: (u8, u8, u8),
+    ) {
         let w = framebuffer.var_screen_info.xres as usize;
         let h = framebuffer.var_screen_info.yres as usize;
 
@@ -139,7 +141,7 @@ fn main() {
 
     loop {
         starfield.tick(&framebuffer, &mut frame);
-        let _ = framebuffer.write_frame(&frame);
+        framebuffer.write_frame(&frame);
     }
 
     //Reenable text mode in current tty

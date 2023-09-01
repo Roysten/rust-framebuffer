@@ -1,9 +1,5 @@
 //!Simple linux framebuffer abstraction.
 //!Examples can be found [here](https://github.com/Roysten/rust-framebuffer/tree/master/examples).
-
-extern crate libc;
-extern crate memmap;
-
 use libc::ioctl;
 
 use std::fmt;
@@ -12,7 +8,7 @@ use std::os::unix::io::AsRawFd;
 use std::path::Path;
 
 use errno::errno;
-use memmap::{MmapMut, MmapOptions};
+use memmap2::{MmapMut, MmapOptions};
 
 const FBIOGET_VSCREENINFO: libc::c_ulong = 0x4600;
 const FBIOPUT_VSCREENINFO: libc::c_ulong = 0x4601;
@@ -191,7 +187,7 @@ impl Framebuffer {
 
     ///Writes a frame to the Framebuffer.
     pub fn write_frame(&mut self, frame: &[u8]) {
-        self.frame[..].copy_from_slice(&frame[..]);
+        self.frame[..].copy_from_slice(frame);
     }
 
     ///Reads a frame from the framebuffer.
@@ -238,10 +234,7 @@ impl Framebuffer {
         }
     }
 
-    pub fn pan_display(
-        device: &File,
-        screeninfo: &VarScreeninfo,
-    ) -> Result<i32, FramebufferError> {
+    pub fn pan_display(device: &File, screeninfo: &VarScreeninfo) -> Result<i32, FramebufferError> {
         match unsafe { ioctl(device.as_raw_fd(), FBIOPAN_DISPLAY as _, screeninfo) } {
             -1 => Err(FramebufferError::new(
                 FramebufferErrorKind::IoctlFailed,

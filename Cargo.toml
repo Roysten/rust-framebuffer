@@ -2,7 +2,7 @@
 name = "framebuffer"
 version = "0.3.1"
 authors = ["Roy van der Vegt <royvandervegt@gmail.com>"]
-edition = "2018"
+edition = "2021"
 description = """
 Basic framebuffer abstraction. Handles the necessary ioctls and mmaps the framebuffer device.
 """
@@ -16,8 +16,8 @@ path = "src/lib.rs"
 
 [dependencies]
 libc = "0.2"
-memmap = "0.7"
-errno = "0.2.7"
+memmap2 = "0.6.1"
+errno = "0.3"
 
 [[example]]
 name = "rust-logo"
@@ -36,5 +36,5 @@ name = "sierpinski"
 path = "examples/sierpinski/main.rs"
 
 [dev_dependencies]
-bmp = "0.1.4"
+image = "0.24"
 rand = "0.8"
