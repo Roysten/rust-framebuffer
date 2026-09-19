@@ -2,7 +2,6 @@ extern crate framebuffer;
 extern crate rand;
 
 use framebuffer::Framebuffer;
-use rand::Rng;
 
 const STAR_SPEED: f32 = 1.003;
 const STAR_GROWTH: f32 = 1.002;
@@ -95,16 +94,15 @@ impl Star {
         let wh = w as f32 / 4.0;
         let hh = h as f32 / 4.0;
 
-        let mut rng = rand::thread_rng();
-        self.x = rng.gen_range(-wh..wh);
-        self.b = rng.gen_range(-hh..hh);
+        self.x = rand::random_range(-wh..wh);
+        self.b = rand::random_range(-hh..hh);
         if self.x != 0.0 {
             self.a = self.b / self.x;
         }
-        self.size = rng.gen_range(1.0..1.001);
-        self.color.0 = rng.gen_range(128..255);
-        self.color.1 = rng.gen_range(128..255);
-        self.color.2 = rng.gen_range(128..255);
+        self.size = rand::random_range(1.0..1.001);
+        self.color.0 = rand::random_range(128..255);
+        self.color.1 = rand::random_range(128..255);
+        self.color.2 = rand::random_range(128..255);
     }
 
     fn get_pos(&self, w: usize, h: usize) -> (usize, usize) {
